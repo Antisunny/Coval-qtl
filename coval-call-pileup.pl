@@ -66,22 +66,28 @@ if ($stderr =~ /Version:\s([\.\d]+)/){
     my $samtools_ver = $1;
     my ($samtools_ver_major,$samtools_ver_sub, $samtools_ver_min) = split /\./, $samtools_ver;
     if ($samtools_ver_major > 0) {
-            print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $samtools_ver, higher than ver. 0.1.8.\n";
-            print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
-            print STDERR "If not, ignore this warning.\n";
+            &samtools_version_warning $samtools_ver;
         }elsif ($samtools_ver_sub >1){
-            print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $samtools_ver, higher than ver. 0.1.8.\n";
-            print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
-            print STDERR "If not, ignore this warning.\n";
+            &samtools_version_warning $samtools_ver;
         }elsif ($samtools_ver_min > 8){
-            print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $samtools_ver, higher than ver. 0.1.8.\n";
-            print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
-            print STDERR "If not, ignore this warning.\n";
+            &samtools_version_warning $samtools_ver;
         }else{
             print STDERR "samtools version too high to be properly used\n"
         }
 }
-
+sub samtools_version_warning {
+    my ($current_samtools_version,) = @_;
+    print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $current_samtools_version, higher than ver. 0.1.8.\n";
+    print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
+    print STDERR "If not, ignore this warning.\n";
+    print STDERR "Still Go on to further analysis or back to check your pileup file ?[y/n] ";
+    chomp my $chioce_goon_or_back = <STDIN>;
+    if ($chioce_goon_or_back =~ m/Y(es)?/i){
+        print STDERR "Good Luck For U\n";
+    }elsif ($chioce_goon_or_back =~ /No?/i){
+        exit 0;
+    }
+}
 
 my $base_qual = '';
 my $sanger_type = 0;
