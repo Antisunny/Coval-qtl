@@ -62,13 +62,24 @@ covar call [options] <input_pileup_file>
 =cut
 
 my $stderr = `samtools 2>&1`;
-if ($stderr =~ /Version:\s\d\.\d\.(\d+)/){
-    my $samtool_ver = $1;
-    if ($samtool_ver > 8){
-        print "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be higher than ver. 0.1.8.\n";
-        print "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
-        print "If not, ignore this warning.\n";
-    }
+if ($stderr =~ /Version:\s([\.\d]+)/){
+    my $samtools_ver = $1;
+    my ($samtools_ver_major,$samtools_ver_sub, $samtools_ver_min) = split /\./, $samtools_ver;
+    if ($samtools_ver_major > 0) {
+            print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $samtools_ver, higher than ver. 0.1.8.\n";
+            print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
+            print STDERR "If not, ignore this warning.\n";
+        }elsif ($samtools_ver_sub >1){
+            print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $samtools_ver, higher than ver. 0.1.8.\n";
+            print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
+            print STDERR "If not, ignore this warning.\n";
+        }elsif ($samtools_ver_min > 8){
+            print STDERR "\n########## Warning! ##########\nThe version of samtools in your PATH appears to be $samtools_ver, higher than ver. 0.1.8.\n";
+            print STDERR "If you generated the pileup file with the samtools 'pileup' from ver. 0.1.9 or later, expected results will not be obtained. ";
+            print STDERR "If not, ignore this warning.\n";
+        }else{
+            print STDERR "samtools version too high to be properly used\n"
+        }
 }
 
 
