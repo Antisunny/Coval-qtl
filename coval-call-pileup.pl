@@ -66,11 +66,11 @@ if ($stderr =~ /Version:\s([\.\d]+)/){
     my $samtools_ver = $1;
     my ($samtools_ver_major,$samtools_ver_sub, $samtools_ver_min) = split /\./, $samtools_ver;
     if ($samtools_ver_major > 0) {
-            &samtools_version_warning $samtools_ver;
+            &samtools_version_warning($samtools_ver);
         }elsif ($samtools_ver_sub >1){
-            &samtools_version_warning $samtools_ver;
+            &samtools_version_warning($samtools_ver);
         }elsif ($samtools_ver_min > 8){
-            &samtools_version_warning $samtools_ver;
+            &samtools_version_warning($samtools_ver);
         }else{
             print STDERR "samtools version too high to be properly used\n"
         }
